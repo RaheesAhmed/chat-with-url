@@ -23,7 +23,7 @@ To get started with this API, follow these steps:
 
    ```bash
    git clone https://github.com/RaheesAhmed/chat-with-url.git
-   cd chat-with-url-api
+   cd chat-with-url
    ```
 
 2. **Install the dependencies:**
@@ -139,6 +139,6 @@ Example Error Response
 `openai`: OpenAI API client.
 `langchain`: Language chain utilities and components.
 
-### License
+## License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License.[License.md](License.md)
