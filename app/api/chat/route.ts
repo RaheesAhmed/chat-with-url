@@ -9,11 +9,6 @@ import { OpenAIEmbeddings, ChatOpenAI } from "@langchain/openai";
 import { pull } from "langchain/hub";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { StringOutputParser } from "@langchain/core/output_parsers";
-import dotenv from "dotenv";
-
-dotenv.config();
-
-
 
 interface MainParams {
   query: string;
@@ -23,7 +18,7 @@ interface MainParams {
   maxTokens?: number;
   chunkSize?: number;
   chunkOverlap?: number;
-  apikey?: string;
+  apikey: string;
 }
 
 const main = async ({
@@ -99,16 +94,14 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
-    const { query, url, model, temperature, maxTokens, chunkSize, chunkOverlap,apikey }: MainParams = await req.json();
-    if (!query || !url) {
-      throw new Error("Query and URL are required parameters.");
+    const { query, url, model, temperature, maxTokens, chunkSize, chunkOverlap, apikey }: MainParams = await req.json();
+    if (!query || !url || !apikey) {
+      throw new Error("Query, URL, and API key are required parameters.");
     }
-    const response = await main({ query, url, model, temperature, maxTokens, chunkSize, chunkOverlap,apikey });
+    const response = await main({ query, url, model, temperature, maxTokens, chunkSize, chunkOverlap, apikey });
     return NextResponse.json(response);
   } catch (error) {
     console.error("Error in POST handler:", error);
     return NextResponse.json({ error: error }, { status: 500 });
   }
 }
-
-
