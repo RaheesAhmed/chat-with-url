@@ -29,7 +29,7 @@ const main = async ({
   maxTokens = 1000,
   chunkSize = 1000,
   chunkOverlap = 200,
-  apikey
+  apikey,
 }: MainParams): Promise<any> => {
   try {
     if (!apikey) {
@@ -98,6 +98,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     if (!query || !url || !apikey) {
       throw new Error("Query, URL, and API key are required parameters.");
     }
+    console.log("Received request with query:", query, "and URL:", url, "and API key", apikey);
     const response = await main({ query, url, model, temperature, maxTokens, chunkSize, chunkOverlap, apikey });
     return NextResponse.json(response);
   } catch (error) {
