@@ -100,7 +100,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     }
     console.log("Received request with query:", query, "and URL:", url, "and API key", apikey);
     const response = await main({ query, url, model, temperature, maxTokens, chunkSize, chunkOverlap, apikey });
-    return NextResponse.json(response);
+    console.log("Response:", response);
+    return NextResponse.json({response: response});
   } catch (error) {
     console.error("Error in POST handler:", error);
     return NextResponse.json({ error: error }, { status: 500 });
