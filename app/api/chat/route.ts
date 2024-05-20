@@ -6,8 +6,6 @@ import { CheerioWebBaseLoader } from "@langchain/community/document_loaders/web/
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { OpenAIEmbeddings, ChatOpenAI } from "@langchain/openai";
-import { pull } from "langchain/hub";
-import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 interface MainParams {
   query: string;
@@ -79,6 +77,7 @@ const main = async ({
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   const apikey = req.headers.get('OPENAI_API_KEY');
+  console.log("Api Key Setted")
   if (!apikey) {
     return NextResponse.json({ error: "API key is required in header." }, { status: 400 });
   }
@@ -92,6 +91,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ response: response });
   } catch (error) {
     console.error("Error in POST handler:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: error }, { status: 500 });
   }
 }
