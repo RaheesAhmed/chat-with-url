@@ -64,7 +64,7 @@ Returns a welcome message.
 
 ```json
 {
-  "message": "Welcome to Chat with URL...."
+  "response": "Welcome to Chat with URL...."
 }
 ```
 

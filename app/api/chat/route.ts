@@ -75,6 +75,23 @@ const main = async ({
   return res;
 };
 
+export async function GET(req: NextRequest): Promise<NextResponse> {
+  return NextResponse.json({ response: "Welcome to the **Chat with URL API**! This API uses various tools and libraries to fetch content from a URL, process it, and generate responses using OpenAI's language models. It supports both GET and POST requests." ,parameters: {
+    query: "string",
+    url: "string",
+    model: "string (optional)",
+    temperature: "number (optional)",
+    maxTokens: "number (  optional)",
+    chunkSize: "number (optional)",
+    chunkOverlap: "number (optional)",
+    apikey: "string (required)",
+  }});
+
+
+
+}
+
+
 export async function POST(req: NextRequest): Promise<NextResponse> {
   
 
