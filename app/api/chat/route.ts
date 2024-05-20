@@ -76,13 +76,15 @@ const main = async ({
 };
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const apikey = req.headers.get('OPENAI_API_KEY');
+  
+
+  try {
+
+    const apikey = req.headers.get('OPENAI_API_KEY');
   console.log("Api Key Setted")
   if (!apikey) {
     return NextResponse.json({ error: "API key is required in header." }, { status: 400 });
   }
-
-  try {
     const { query, url, model, temperature, maxTokens, chunkSize, chunkOverlap }: MainParams = await req.json();
     if (!query || !url) {
       return NextResponse.json({ error: "Query and URL are required parameters." }, { status: 400 });
