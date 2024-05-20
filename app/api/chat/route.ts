@@ -38,8 +38,8 @@ const main = async ({
   const llm = new ChatOpenAI({
     model,
     temperature,
-    apiKey: apikey,
     maxTokens,
+    apiKey: apikey,
   });
 
   const textSplitter = new RecursiveCharacterTextSplitter({
@@ -47,7 +47,7 @@ const main = async ({
     chunkOverlap,
   });
   const splits = await textSplitter.splitDocuments(docs);
-  const vectorStore = await MemoryVectorStore.fromDocuments(splits, new OpenAIEmbeddings());
+  const vectorStore = await MemoryVectorStore.fromDocuments(splits, new OpenAIEmbeddings({apikey}));
   const retriever = vectorStore.asRetriever();
 
   const template = `Use the following pieces of context to answer the question at the end.
@@ -98,15 +98,17 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
 
     const apikey = req.headers.get('OPENAI_API_KEY');
-  console.log("Api Key Setted")
+  console.log("Api Key Recieved")
   if (!apikey) {
     return NextResponse.json({ error: "API key is required in header." }, { status: 400 });
   }
     const { query, url, model, temperature, maxTokens, chunkSize, chunkOverlap }: MainParams = await req.json();
+    console.log("Request Recieved")
     if (!query || !url) {
       return NextResponse.json({ error: "Query and URL are required parameters." }, { status: 400 });
     }
     const response = await main({ query, url, model, temperature, maxTokens, chunkSize, chunkOverlap, apikey });
+    console.log("Response Recieved")
     return NextResponse.json({ response: response });
   } catch (error) {
     console.error("Error in POST handler:", error);
