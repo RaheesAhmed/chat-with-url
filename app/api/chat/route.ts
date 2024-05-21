@@ -7,6 +7,7 @@ import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { OpenAIEmbeddings, ChatOpenAI } from "@langchain/openai";
 import { StringOutputParser } from "@langchain/core/output_parsers";
+import { OpenAI } from "@langchain/openai";
 interface MainParams {
   query: string;
   url: string;
@@ -35,7 +36,7 @@ const main = async ({
   const loader = new CheerioWebBaseLoader(url);
   const docs = await loader.load();
 
-  const llm = new ChatOpenAI({
+  const llm = new OpenAI({
     model,
     temperature,
     maxTokens,
@@ -47,7 +48,7 @@ const main = async ({
     chunkOverlap,
   });
   const splits = await textSplitter.splitDocuments(docs);
-  const vectorStore = await MemoryVectorStore.fromDocuments(splits, new OpenAIEmbeddings({apikey}));
+  const vectorStore = await MemoryVectorStore.fromDocuments(splits, new OpenAIEmbeddings());
   const retriever = vectorStore.asRetriever();
 
   const template = `Use the following pieces of context to answer the question at the end.
