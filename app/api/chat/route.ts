@@ -8,6 +8,12 @@ import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { OpenAIEmbeddings, ChatOpenAI } from "@langchain/openai";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import { OpenAI } from "@langchain/openai";
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+
+
 interface MainParams {
   query: string;
   url: string;
@@ -16,22 +22,21 @@ interface MainParams {
   maxTokens?: number;
   chunkSize?: number;
   chunkOverlap?: number;
-  apikey: string;
 }
+
+
 
 const main = async ({
   query,
   url,
-  model = "gpt-3.5-turbo",
+  model = "gpt-4o",
   temperature = 0.7,
   maxTokens = 1000,
   chunkSize = 1000,
   chunkOverlap = 200,
-  apikey,
+  
 }: MainParams): Promise<any> => {
-  if (!apikey) {
-    throw new Error("API key is missing.");
-  }
+  
 
   const loader = new CheerioWebBaseLoader(url);
   const docs = await loader.load();
@@ -40,7 +45,6 @@ const main = async ({
     model,
     temperature,
     maxTokens,
-    apiKey: apikey,
   });
 
   const textSplitter = new RecursiveCharacterTextSplitter({
@@ -85,7 +89,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     maxTokens: "number (  optional)",
     chunkSize: "number (optional)",
     chunkOverlap: "number (optional)",
-    apikey: "string (required)",
+   
   }});
 
 
@@ -97,18 +101,12 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   
 
   try {
-
-    const apikey = req.headers.get('OPENAI_API_KEY');
-  console.log("Api Key Recieved")
-  if (!apikey) {
-    return NextResponse.json({ error: "API key is required in header." }, { status: 400 });
-  }
     const { query, url, model, temperature, maxTokens, chunkSize, chunkOverlap }: MainParams = await req.json();
     console.log("Request Recieved")
     if (!query || !url) {
       return NextResponse.json({ error: "Query and URL are required parameters." }, { status: 400 });
     }
-    const response = await main({ query, url, model, temperature, maxTokens, chunkSize, chunkOverlap, apikey });
+    const response = await main({ query, url, model, temperature, maxTokens, chunkSize, chunkOverlap});
     console.log("Response Recieved")
     return NextResponse.json({ response: response });
   } catch (error) {
