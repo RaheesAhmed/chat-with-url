@@ -2,6 +2,8 @@
 
 Welcome to the **Chat with URL API**! This API uses various tools and libraries to fetch content from a URL, process it, and generate responses using OpenAI's language models. It supports both GET and POST requests.
 
+![Chat with URL](public/chat%20with%20url.PNG)
+
 ## Table of Contents
 
 - [Getting Started](#getting-started)
@@ -80,7 +82,6 @@ Processes the content from a given URL and generates a response using OpenAI's l
 `maxTokens (number, optional)`: The maximum number of tokens for the OpenAI model (default is 1000).
 `chunkSize (number, optional)`: The chunk size for splitting the content (default is 1000).
 `chunkOverlap (number, optional)`: The chunk overlap for splitting the content (default is 200).
-`apikey (string)`: The OpenAI API key (can be provided as an environment variable).
 
 #### Response
 
@@ -103,7 +104,6 @@ curl -X POST http://localhost:3000/api -H "Content-Type: application/json" -d '{
   "maxTokens": 1000,
   "chunkSize": 1000,
   "chunkOverlap": 200,
-  "apikey": "your_openai_api_key"
 }'
 
 
@@ -120,14 +120,6 @@ Response
 ## Error Handling
 
 Errors are logged to the console, and the API returns a JSON response with the error message and a status code of 500.
-
-Example Error Response
-
-```json
-{
-  "error": "OpenAI API key is missing."
-}
-```
 
 ## Dependencies
 

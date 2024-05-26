@@ -25,6 +25,41 @@ interface MainParams {
 }
 
 
+export async function GET(req: NextRequest): Promise<NextResponse> {
+  return NextResponse.json({ response: "Welcome to the **Chat with URL API**! This API uses various tools and libraries to fetch content from a URL, process it, and generate responses using OpenAI's language models. It supports both GET and POST requests." ,parameters: {
+    query: "string",
+    url: "string",
+    model: "string (optional)",
+    temperature: "number (optional)",
+    maxTokens: "number (  optional)",
+    chunkSize: "number (optional)",
+    chunkOverlap: "number (optional)",
+   
+  }});
+
+
+
+}
+
+
+export async function POST(req: NextRequest): Promise<NextResponse> {
+  
+
+  try {
+    const { query, url, model, temperature, maxTokens, chunkSize, chunkOverlap }: MainParams = await req.json();
+    console.log("Request Recieved")
+    if (!query || !url) {
+      return NextResponse.json({ error: "Query and URL are required parameters." }, { status: 400 });
+    }
+    const response = await main({ query, url, model, temperature, maxTokens, chunkSize, chunkOverlap});
+    console.log("Response Recieved")
+    return NextResponse.json({ response: response });
+  } catch (error) {
+    console.error("Error in POST handler:", error);
+    return NextResponse.json({ error: error }, { status: 500 });
+  }
+}
+
 
 const main = async ({
   query,
@@ -79,38 +114,3 @@ const main = async ({
 
   return res;
 };
-
-export async function GET(req: NextRequest): Promise<NextResponse> {
-  return NextResponse.json({ response: "Welcome to the **Chat with URL API**! This API uses various tools and libraries to fetch content from a URL, process it, and generate responses using OpenAI's language models. It supports both GET and POST requests." ,parameters: {
-    query: "string",
-    url: "string",
-    model: "string (optional)",
-    temperature: "number (optional)",
-    maxTokens: "number (  optional)",
-    chunkSize: "number (optional)",
-    chunkOverlap: "number (optional)",
-   
-  }});
-
-
-
-}
-
-
-export async function POST(req: NextRequest): Promise<NextResponse> {
-  
-
-  try {
-    const { query, url, model, temperature, maxTokens, chunkSize, chunkOverlap }: MainParams = await req.json();
-    console.log("Request Recieved")
-    if (!query || !url) {
-      return NextResponse.json({ error: "Query and URL are required parameters." }, { status: 400 });
-    }
-    const response = await main({ query, url, model, temperature, maxTokens, chunkSize, chunkOverlap});
-    console.log("Response Recieved")
-    return NextResponse.json({ response: response });
-  } catch (error) {
-    console.error("Error in POST handler:", error);
-    return NextResponse.json({ error: error }, { status: 500 });
-  }
-}
